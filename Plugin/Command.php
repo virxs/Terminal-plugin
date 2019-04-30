@@ -4,10 +4,12 @@ function Command($vk, $cmd){
         if($cmd[1]){
             $dialog_role = array();
             $user = Vk::User($vk->object->peer_id);
-            foreach (Role::Name($cmd[1]) as $user_role){
+            if($role_list = Role::Name($cmd[1])){
+            foreach ($role_list as $user_role){
                 foreach ($user as $id){
                     if($id == $user_role) array_push($dialog_role, $id);
                 }
+            }
             }
             if(count($dialog_role) > 0){
                 $message = "Роль ".$cmd[1]." найдена у:\n";
@@ -18,7 +20,7 @@ function Command($vk, $cmd){
                 return true;
             }
             else{
-                Vk::Message('Участников беседы с такой ролью '.cmd[1].' не найдено', $vk->object->peer_id);
+                Vk::Message('Участников беседы с ролью '.$cmd[1].' не найдено', $vk->object->peer_id);
                 return true;
             }
         }
